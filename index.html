@@ -6,140 +6,129 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
       <script>
           var temp=0;
-          $(document).ready(function()
-                            {   
+          var historyList = []; // store calculation history
+
+          $(document).ready(function(){   
              
-                $(".bdy").keydown(function(event)
-                                  { 
+                $(".bdy").keydown(function(event){ 
                     var x = event.which, stg = String.fromCharCode(x);
-                    if(x==48||x==96)
-                    $("#bt0").addClass("bt");
-                    if(x==49||x==97)
-                    $("#bt1").addClass("bt");
-                    if(x==50||x==98)
-                    $("#bt2").addClass("bt");
-                    if(x==51||x==99)
-                    $("#bt3").addClass("bt");
-                    if(x==52||x==100)
-                    $("#bt4").addClass("bt");
-                    if(x==53||x==101)
-                    $("#bt5").addClass("bt");
-                    if(x==54||x==102)
-                    $("#bt6").addClass("bt");
-                    if(x==55||x==103)
-                    $("#bt7").addClass("bt");
-                    if(x==56||x==104)
-                    $("#bt8").addClass("bt");
-                    if(x==57||x==105)
-                    $("#bt9").addClass("bt");
-                    if(x==110||x==190)
-                    $("#btdot").addClass("bt");
-                    if(x==13)
-                    $("#bteq").addClass("bt");
-                    if(x==8)
-                    $("#btbs").addClass("btx");
-                    if(x==67)
-                    $("#btclr").addClass("btx");
-                    if(x==106)
-                    $("#btmtp").addClass("btx");
-                    if(x==107)
-                    $("#btadd").addClass("btx");
-                    if(x==109)
-                    $("#btsub").addClass("btx");
-                    if(x==111)
-                    $("#btdiv").addClass("btx");
-                        });
-                $(".bdy").keyup(function()
-                                {
-                    $("#bt0").removeClass("bt");
-                    $("#bt1").removeClass("bt");
-                    $("#bt2").removeClass("bt");
-                    $("#bt3").removeClass("bt");
-                    $("#bt4").removeClass("bt");
-                    $("#bt5").removeClass("bt");
-                    $("#bt6").removeClass("bt");
-                    $("#bt7").removeClass("bt");
-                    $("#bt8").removeClass("bt");
-                    $("#bt9").removeClass("bt");
-                    $("#btdot").removeClass("bt");
-                    $("#bteq").removeClass("bt");
-                    $("#btbs").removeClass("btx");
-                    $("#btclr").removeClass("btx");
-                    $("#btmtp").removeClass("btx");
-                    $("#btadd").removeClass("btx");
-                    $("#btsub").removeClass("btx");
-                    $("#btdiv").removeClass("btx");
-                                });
-                            });
-         function getin(val) 
-         { 
-             document.getElementById("rslt").value+=val 
+                    if(x==48||x==96) $("#bt0").addClass("bt");
+                    if(x==49||x==97) $("#bt1").addClass("bt");
+                    if(x==50||x==98) $("#bt2").addClass("bt");
+                    if(x==51||x==99) $("#bt3").addClass("bt");
+                    if(x==52||x==100) $("#bt4").addClass("bt");
+                    if(x==53||x==101) $("#bt5").addClass("bt");
+                    if(x==54||x==102) $("#bt6").addClass("bt");
+                    if(x==55||x==103) $("#bt7").addClass("bt");
+                    if(x==56||x==104) $("#bt8").addClass("bt");
+                    if(x==57||x==105) $("#bt9").addClass("bt");
+                    if(x==110||x==190) $("#btdot").addClass("bt");
+                    if(x==13) $("#bteq").addClass("bt");
+                    if(x==8) $("#btbs").addClass("btx");
+                    if(x==67) $("#btclr").addClass("btx");
+                    if(x==106) $("#btmtp").addClass("btx");
+                    if(x==107) $("#btadd").addClass("btx");
+                    if(x==109) $("#btsub").addClass("btx");
+                    if(x==111) $("#btdiv").addClass("btx");
+                });
+
+                $(".bdy").keyup(function(){
+                    $("#bt0,#bt1,#bt2,#bt3,#bt4,#bt5,#bt6,#bt7,#bt8,#bt9,#btdot,#bteq,#btbs,#btclr,#btmtp,#btadd,#btsub,#btdiv").removeClass("bt btx");
+                });
+          });
+
+         function getin(val){ 
+             document.getElementById("rslt").value += val; 
          }  
-         function calc() 
-         { 
-             var x = document.getElementById("rslt").value
-             var y = eval(x) 
-             document.getElementById("rslt").value = y 
+
+         function calc(){ 
+             var x = document.getElementById("rslt").value;
+             if(x.trim() === "") return;
+             try {
+                 var y = eval(x);
+                 document.getElementById("rslt").value = y;
+                 addToHistory(x, y);
+             } catch(e){
+                 alert("Invalid Expression");
+             }
          } 
-         function clrall() 
-         { 
-             document.getElementById("rslt").value = "" 
+
+         function clrall(){ 
+             document.getElementById("rslt").value = ""; 
          }
-         function backspace()
-         {
+
+         function backspace(){
             var dlt  = document.getElementById('rslt').value;
-               document.getElementById('rslt').value=dlt.substring(0,dlt.length -1);
+            document.getElementById('rslt').value = dlt.substring(0,dlt.length -1);
          }
-          function key1(event)
-         {
-              var x = event.which, stg = String.fromCharCode(x);
-             if(x == 67)
-             {
-              clrall();
-             }
-             else if(x == 8)
-             {
-              backspace(); 
-             }
+
+         function key1(event){
+              var x = event.which;
+              if(x == 67) clrall();
+              else if(x == 8) backspace(); 
          }
-        function key(event) {
+
+         function key(event) {
               var x = event.which, stg = String.fromCharCode(x);
-              if(x==13){
-                  calc();  
-              }
-            console.log("x="+x+" temp="+temp)
+              if(x==13) calc();  
               if(x >39 && x<61 && x!=44 && x!=59 && x!=58 && x!=60 && x!=46){
                   getin(stg);
-                if(x==41 || x==40 || x==47 || x==42 || x==45 || x==43 || x==13)
-                {
-                temp=0;
-                }
+                  if(x==41 || x==40 || x==47 || x==42 || x==45 || x==43 || x==13) temp=0;
               }
               if(x==46 && temp==0){
                     getin(stg);
                     temp++;
-              }
-              else
-                  document.getElementById("rslt").value += "";
+              } else document.getElementById("rslt").value += "";
+         }
+
+         // -------------------------------
+         // History functionality
+         // -------------------------------
+         function addToHistory(expr, result){
+             historyList.push(expr + " = " + result);
+             updateHistory();
+         }
+
+         function updateHistory(){
+             var histDiv = document.getElementById("history");
+             histDiv.innerHTML = "";
+             historyList.slice().reverse().forEach(function(item){
+                 var p = document.createElement("p");
+                 p.className = "mb-1";
+                 p.textContent = item;
+                 histDiv.appendChild(p);
+             });
+         }
+
+         function clearHistory(){
+             historyList = [];
+             document.getElementById("history").innerHTML = "<i>No history yet</i>";
          }
       </script>
+
 <style>
 table {
   border-collapse: collapse;
   border-spacing: 0;
   min-width: 44%;
-    }
-    td{
-        font-size: 40px !important;
-    }
+}
+td{
+    font-size: 40px !important;
+}
 .bt{
     background-color: #17a2b8;
     color: white; 
-   }
-    
+}
 .btx{
     background-color: #138496;
-   }
+}
+#history-box{
+    margin-top: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
 </style>
        
    </head> 
@@ -163,15 +152,14 @@ table {
             <td><button id="bt5" class="btn btn-outline-info btn-block" type="button" onclick="getin('5')">5</button> </td> 
             <td><button id="bt6" class="btn btn-outline-info btn-block" type="button" onclick="getin('6')">6</button> </td> 
             <td><button id="btsub" class="btn btn-info btn-block" type="button" onclick="getin('-')">-</button> </td>
-            <td><button id="btp1" class="btn btn-info btn-block" type="button" onclick="getin('&#40;')">	&#40;</button> </td>
-
+            <td><button id="btp1" class="btn btn-info btn-block" type="button" onclick="getin('(')">(</button> </td>
          </tr> 
          <tr> 
             <td><button id="bt7" class="btn btn-outline-info btn-block" type="button" onclick="getin('7')">7</button> </td> 
             <td><button id="bt8" class="btn btn-outline-info btn-block" type="button" onclick="getin('8')">8</button> </td> 
             <td><button id="bt9" class="btn btn-outline-info btn-block" type="button" onclick="getin('9')">9</button> </td> 
             <td><button id="btadd" class="btn btn-info btn-block" type="button" onclick="getin('+')">+</button> </td>
-            <td><button id="btp2" class="btn btn-info btn-block" type="button" onclick="getin('&#41;')">	&#41;</button> </td>
+            <td><button id="btp2" class="btn btn-info btn-block" type="button" onclick="getin(')')">)</button> </td>
          </tr> 
          <tr> 
             <td><button id="btdot" class="btn btn-outline-info btn-block" type="button" onclick="getin('.')">.</button> </td> 
@@ -180,5 +168,12 @@ table {
             <td><button id="btmtp" class="btn btn-info btn-block" type="button" value="*" onclick="getin('*')">*</button> </td> 
          </tr> 
       </table> 
+
+      <div id="history-box" class="text-center">
+          <h3>Calculation History</h3>
+          <div id="history"><i>No history yet</i></div>
+          <button class="btn btn-danger btn-sm mt-2" onclick="clearHistory()">Clear History</button>
+      </div>
+
    </body> 
-</html>  
+</html>
